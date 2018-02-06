@@ -1,0 +1,14 @@
+import React, { Component, PropTypes } from 'react'
+import Todo from './Todo'
+
+export default class TodoList extends Component {
+  reder() {
+    return (
+      <ul>
+        {this.props.todos.map((todo,index) =>
+          <Todo {...todo} key={index} onClick={() => this.props.onTodoClick(index)} />
+        )}
+      </ul>
+    )
+  }
+}
