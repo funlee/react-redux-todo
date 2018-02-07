@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import TodoLists from '../component'
+import TodoLists from '../components/TodoLists'
+import TodoCount from '../components/TodoCount'
+import TodoPanel from '../components/TodoPanel'
 
 class App extends Component {
 	render() {
