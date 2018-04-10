@@ -1,11 +1,37 @@
 import React, { Component } from 'react';
-import { toggleTodo, deleteTodo } from '../redux/actions/todoAction';
+import { toggleTodo, deleteTodo, addTodo } from '../redux/actions/todoAction';
 
 import { connect } from 'react-redux';
 
 class TodoLists extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      value: ''
+    }
+    this.handleClick = this.handleClick.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
+  }
+  handleClick() {
+    if (this.state.value.trim() == '') {
+      alert('请输入Task！')
+      return
+    }
+    this.props.addTodo(this.state.value.trim())
+    this.setState({
+      value: ''
+    })
+  }
+  handleChange(event) {
+    this.setState({
+      value: event.target.value
+    })
+  }
+  handleKeyPress(event) {
+    if (event.keyCode == 13) {
+      this.handleClick()
+    }
   }
   render() {
     const { tasks } = this.props.lists
@@ -13,18 +39,34 @@ class TodoLists extends Component {
       <li className={item.complete ? 'active' : ''} key={`li-${index}`}>
         <span className="item-checked" onClick={() => this.props.toggleTodo(item.id)}></span>
         <span className="item-detail">{item.task}</span>
-        <span className="item-delete">删除</span>
+        <span className="item-delete" onClick={() => this.props.deleteTodo(item.id)}>删除</span>
       </li>
     ))
+    const totalCompleteCount = this.props.lists.tasks.filter(item => {
+      return item.complete === true
+    }).length
     return (
-      <ul className="todo-lists">
-        {listDOM}
-      </ul>
+      <div>
+        <ul className="todo-lists">
+          {listDOM}
+        </ul>
+        <div className="item-acount">
+          <span className="did">{totalCompleteCount}</span>已完成 / <span className="amount">{this.props.lists.tasks.length}</span>总数
+        </div>
+        <div className="panel">
+          <p>
+            <span>Task</span>
+            <input type="text" placeholder="你想做点什么？" value={this.state.value} onChange={this.handleChange} onKeyUp={this.handleKeyPress} />
+          </p>
+          <p>
+            <button onClick={this.handleClick}>Save Task</button>
+          </p>
+        </div>
+      </div>
     )
   }
 }
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
     lists: state.todoList
   }
@@ -35,8 +77,11 @@ const mapDispatchToProps = (dispatch) => {
     toggleTodo: id => {
       dispatch(toggleTodo(id))
     },
-    deleteTodo: () => {
-      dispatch(deleteTodo())
+    deleteTodo: id => {
+      dispatch(deleteTodo(id))
+    },
+    addTodo: value => {
+      dispatch(addTodo(value))
     }
   }
 };
