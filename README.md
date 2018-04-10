@@ -1,6 +1,6 @@
 react-redux-todo
 ===============
-预览地址：[react-todo](http://show.funlee.cn/react-todo/index.html "react-todo")
+预览地址：[redux-todo](https://funlee.github.io/react-redux-todo/ "redux-todo")
 
 安装
 ----
